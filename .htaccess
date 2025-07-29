@@ -1,0 +1,34 @@
+# Enable URL rewriting
+RewriteEngine On
+RewriteBase /
+
+# Bypass static assets (don’t rewrite .css, .js, .jpg, etc.)
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule \.(css|js|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|ico)$ - [L,NC]
+
+# Allow access to existing PHP files without extension (example.com/about)
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^([^/.]+)$ $1.php [L]
+
+# Admin panel specific route
+RewriteRule ^admin/userLists$ admin/userLists.php [L,QSA]
+
+# Product detail route with slug
+RewriteRule ^product-detail/([^/]+)$ product-detail.php?slug=$1 [L,QSA]
+
+# Edit inventory route with slug
+RewriteRule ^editInventory/([a-zA-Z0-9-]+)/?$ editInventory.php?slug=$1 [L,QSA]
+
+# General dynamic routing for pages like /contact, /about, etc.
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/product-detail/.*$
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
+# Show PHP errors in development environment only
+# (Make sure 'AllowOverride All' is enabled in Apache config)
+php_flag display_errors on
+php_value error_reporting 32767
+
+# Custom 404 page (optional)
+ErrorDocument 404 /404.php

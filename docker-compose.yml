@@ -1,0 +1,49 @@
+
+
+services:
+  web:
+    build: .
+    container_name: webchatapp-web
+    ports:
+      - "8002:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - webchatapp_net
+
+  db:
+    image: mysql:5.7
+    container_name: webchatapp-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: shivam8433
+      MYSQL_DATABASE: webchatapp
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - webchatapp_net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: webchatapp-phpmyadmin
+    restart: always
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: shivam8433
+    depends_on:
+      - db
+    networks:
+      - webchatapp_net
+
+volumes:
+  db_data:
+
+networks:
+  webchatapp_net:
