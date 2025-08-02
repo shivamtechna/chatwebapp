@@ -39,7 +39,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     if (in_array($fileExtension, $allowedfileExtensions)) {
         // Generate new filename
         $newFileName = $userId . '_' . time() . '.' . $fileExtension;
-        $uploadFileDir = './uploads/';
+        $uploadFileDir = '../uploads/';
         $dest_path = $uploadFileDir . $newFileName;
 
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
